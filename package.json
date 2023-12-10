@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines" : { 
-    "npm" : ">=10.0.0",
-    "node" : ">=20.0.0"
+  "engines": {
+    "npm": ">=10.0.0",
+    "node": ">=20.0.0"
   },
   "scripts": {
     "test": "mocha"
@@ -13,9 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@keyv/sqlite": "^3.6.6",
     "@napi-rs/canvas": "^0.1.44",
     "canvas": "^2.11.2",
     "discord.js": "^14.7.1",
+    "keyv": "^4.5.4",
     "memorystream": "^0.3.1",
     "nan": "^2.17.0",
     "number-to-words": "^1.2.4",

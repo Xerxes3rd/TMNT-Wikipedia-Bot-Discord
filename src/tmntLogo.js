@@ -12,11 +12,9 @@ function deg2rad( degrees ) {
 function getLetterHeight( textMetrics ) {
   if ( textMetrics.actualBoundingBoxAscent !== undefined && textMetrics.actualBoundingBoxDescent !== undefined ) {
     return textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent
-  }
-  else if ( textMetrics.emHeightAscent !== undefined && textMetrics.emHeightDescent !== undefined ) {
+  } else if ( textMetrics.emHeightAscent !== undefined && textMetrics.emHeightDescent !== undefined ) {
     return textMetrics.emHeightAscent - textMetrics.emHeightDescent
-  }
-  else {
+  } else {
     return 0
   }
 }
@@ -71,8 +69,7 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
     let angle = 0
     if ( i == letters.length - 1 ) {
       angle = endAngle
-    }
-    else {
+    } else {
       angle = startAngle + i * ( endAngle - startAngle ) / letters.length
     }
 
@@ -111,8 +108,7 @@ function drawTurtles( ctx, canvasWidth, canvasHeight, turtles, turtlesFontName )
     let angle = 0
     if ( letters.length == 1 ) {
       angle = 0
-    }
-    else {
+    } else {
       angle = startAngle + i * ( endAngle - startAngle ) / ( letters.length - 1 )
     }
 
@@ -160,8 +156,7 @@ async function makeTMNTLogo( str, backgroundColor = 'transparent' ) {
     const turtFont = PImage.registerFont( turtlesFontPath, turtlesFontName )
     turtFont.loadSync()
     canvas = PImage.make( canvasWidth, canvasHeight )
-  }
-  else {
+  } else {
     RSCanvas.GlobalFonts.registerFromPath( tmnFontPath, teenageMutantNinjaFontName )
     RSCanvas.GlobalFonts.registerFromPath( turtlesFontPath, turtlesFontName )
     canvas = RSCanvas.createCanvas( canvasWidth, canvasHeight )
@@ -181,8 +176,7 @@ async function makeTMNTLogo( str, backgroundColor = 'transparent' ) {
     const memStream = new MemoryStream()
     await PImage.encodePNGToStream( canvas, memStream )
     return memStream.read()
-  }
-  else {
+  } else {
     return canvas.toBuffer( 'image/png' )
   }
 }

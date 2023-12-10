@@ -16,12 +16,15 @@ function toWordsYear( num_str ) {
         ( high % 10 == 0 && low < 10 ) ||
         high >= 100 ) {
     return toWords( num_str )
-  }
-  else {
+  } else {
     let lowtext = ''
-    if ( low == 0 ) {lowtext = 'hundred'}
-    else if ( low < 10 ) {lowtext = `oh ${toWords( low )}`}
-    else {lowtext = toWords( low )}
+    if ( low == 0 ) {
+      lowtext = 'hundred'
+    } else if ( low < 10 ) {
+      lowtext = `oh ${toWords( low )}`
+    } else {
+      lowtext = toWords( low )
+    }
     return `${toWords( high )} ${lowtext}`
   }
 }
@@ -32,18 +35,15 @@ function numbersToWords( word ) {
     if ( word.length === 4 ) {
       try {
         return toWordsYear( word )
-      }
-      catch {
+      } catch {
         return stressFail
       }
-    }
-    else if ( word.length >= 3 &&
+    } else if ( word.length >= 3 &&
             /\d/.test( word.substring( word.length - 3, 1 ) ) &&
             ordinal_number_endings.includes( word.substring( word.length - 2 ) ) ) {
       try {
         return toWordsOrdinal( word.substring( 0, word.length - 2 ) )
-      }
-      catch {
+      } catch {
         return stressFail
       }
     }

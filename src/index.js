@@ -1,15 +1,18 @@
 const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require( 'discord.js' )
+const Keyv = require( 'keyv' )
 const { token, clientId, guildId } = require( './config.json' )
 const utilityCommands = require( './commands/utility.js' )
 const tmntCommands = require( './commands/tmnt.js' )
 
-async function loadCommands( client ) {
+async function loadCommands( client, keyv ) {
   client.commands = new Collection()
   for ( const command of utilityCommands ) {
     client.commands.set( command.data.name, command )
+    command.keyv = keyv
   }
   for ( const command of tmntCommands ) {
     client.commands.set( command.data.name, command )
+    command.keyv = keyv
   }
 }
 
@@ -26,18 +29,21 @@ async function updateSlashCommands( client ) {
     )
 
     console.log( `Successfully reloaded ${data.length} application (/) commands.` )
-  }
-  catch ( error ) {
+  } catch ( error ) {
     // And of course, make sure you catch and log any errors!
     console.error( error )
   }
 }
 
 async function main() {
+
+  const keyv = new Keyv( 'sqlite://./tmnt-wikipedia-bot-db.sqlite' )
+  keyv.on( 'error', err => console.error( 'Keyv connection error:', err ) )
+
   // Create a new client instance
   const client = new Client( { intents: [GatewayIntentBits.Guilds] } )
 
-  loadCommands( client )
+  loadCommands( client, keyv )
 
   // When the client is ready, run this code (only once).
   // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
@@ -59,13 +65,11 @@ async function main() {
 
     try {
       await command.execute( interaction )
-    }
-    catch ( error ) {
+    } catch ( error ) {
       console.error( error )
       if ( interaction.replied || interaction.deferred ) {
         await interaction.followUp( { content: 'There was an error while executing this command!', ephemeral: true } )
-      }
-      else {
+      } else {
         await interaction.reply( { content: 'There was an error while executing this command!', ephemeral: true } )
       }
     }
@@ -75,5 +79,4 @@ async function main() {
   client.login( token )
 }
 
-// runTMNT()
 main()

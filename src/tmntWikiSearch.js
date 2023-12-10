@@ -27,8 +27,7 @@ async function searchForTMNT( max_pages = MAX_PAGES_TO_CHECK, doLog = false ) {
           }
           return result
         } ) )
-    }
-    catch ( ex ) {
+    } catch ( ex ) {
       console.log( `Error processing wiki pages: ${ex}` )
     }
 
@@ -56,8 +55,7 @@ async function findTMNTPage( max_pages = MAX_PAGES_TO_CHECK, doLog = false ) {
     if ( doLog ) {
       console.log( `Found '${page}' (checked ${pagesChecked} pages): ${url}` )
     }
-  }
-  else {
+  } else {
     console.log( `Failure: checked ${pagesChecked} pages and none matched` )
   }
 

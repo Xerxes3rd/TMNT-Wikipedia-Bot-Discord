@@ -1,7 +1,9 @@
-
 function getMemberInfo( interaction ) {
-  const guild = interaction?.guild
-  return { username : interaction?.member?.user?.username, nickname : interaction?.member?.nickname, guildname : guild.name }
+  return {
+    username : interaction?.member?.user?.username,
+    nickname : interaction?.member?.nickname,
+    guildname : interaction?.guild?.name,
+  }
 }
 
 function logInteraction( commandInfoStr, interaction ) {

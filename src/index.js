@@ -1,6 +1,6 @@
 const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require( 'discord.js' )
 const Keyv = require( 'keyv' )
-const { CronJob } = require( 'cron' )
+const cron = require( 'node-cron' )
 const { token, clientId, guildId } = require( './config.json' )
 const utilityCommands = require( './commands/utility.js' )
 const tmntCommands = require( './commands/tmnt.js' )
@@ -18,7 +18,7 @@ async function loadCommands( client, keyv ) {
   }
 }
 
-async function updateSlashCommands( client ) {
+async function refreshSlashCommands( client ) {
   const commands = client.commands.map( command => command.data.toJSON() )
   const rest = new REST().setToken( token )
   try {
@@ -37,13 +37,8 @@ async function updateSlashCommands( client ) {
   }
 }
 
-async function main() {
-
-  const keyv = new Keyv( 'sqlite://./tmnt-wikipedia-bot-db.sqlite' )
+async function start( keyv, client, doRefreshSlashCommands = true ) {
   keyv.on( 'error', err => console.error( 'Keyv connection error:', err ) )
-
-  // Create a new client instance
-  const client = new Client( { intents: [GatewayIntentBits.Guilds] } )
 
   loadCommands( client, keyv )
 
@@ -51,7 +46,9 @@ async function main() {
   // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
   // It makes some properties non-nullable.
   client.once( Events.ClientReady, readyClient => {
-    updateSlashCommands( client )
+    if ( doRefreshSlashCommands ) {
+      refreshSlashCommands( client )
+    }
     // doDailyPost( keyv, client ) // for testing
     dailyJob.start()
     console.log( `Ready! Logged in as ${readyClient.user.tag}` )
@@ -79,18 +76,25 @@ async function main() {
     }
   } )
 
-  // Log in to Discord with your client's token
-  client.login( token )
-
-  const dailyJob = new CronJob(
-    '0 0 8 * * *', // 8 AM
-    async function() { doDailyPost( keyv, client ) }, // onTick
-    null, // onComplete
-    false, // start
-    'America/Los_Angeles', // timeZone
-    undefined,
-    false,
+  const dailyJob = cron.schedule(
+    '0 8 * * *', // 8 AM
+    async () => { await doDailyPost( keyv, client ) }, // onTick
+    {
+      scheduled: false,
+      timezone: 'America/New_York',
+    },
   )
+
+  client.login( token )
+}
+
+async function main() {
+
+  const keyv = new Keyv( 'sqlite://./tmnt-wikipedia-bot-db.sqlite' )
+  // Create a new client instance
+  const client = new Client( { intents: [GatewayIntentBits.Guilds] } )
+
+  await start( keyv, client )
 }
 
 main()

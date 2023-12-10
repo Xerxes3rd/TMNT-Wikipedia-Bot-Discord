@@ -39,6 +39,7 @@ async function removeScheduledPost( keyv, guildId ) {
 
 async function doDailyPost( keyv, client ) {
   if ( !keyv ) {
+    console.log( 'doDailyPost() error: keyv is undefined' )
     return
   }
 

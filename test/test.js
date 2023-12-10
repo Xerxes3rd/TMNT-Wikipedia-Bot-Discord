@@ -5,7 +5,7 @@ const { join } = require( 'path' )
 const { isTMNT, splitStringForTMNT } = require( '../src/tmntWords.js' )
 const { makeTMNTLogo } = require( '../src/tmntLogo.js' )
 const { findTMNTPage } = require( '../src/tmntWikiSearch.js' )
-const { BANNED_WORDS, BANNED_PHRASES } = require( '../src/bannedItems.js' )
+const { bannedWords, bannedPhrases } = require( '../src/bannedItems.js' )
 const fs = require( 'fs' )
 
 describe( 'Text parsing tests', async () => {
@@ -16,18 +16,18 @@ describe( 'Text parsing tests', async () => {
   } )
 
   it( 'Should identify all the syllables in phrases', async () => {
-    expect( isTMNT( 'Teenage Mutant Ninja Turtles', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
-    expect( isTMNT( '[Single Payer Health Insurance]', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
-    expect( isTMNT( 'Romeo, Romeo, wherefore art thou, Romeo?', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.false
-    expect( isTMNT( 'Big fire of 2014', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
-    expect( isTMNT( 'Big fire of 1923', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.false
-    expect( isTMNT( 'Sitting on the subway station', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
-    expect( isTMNT( 'Murder of the subway station', false, BANNED_WORDS, BANNED_PHRASES ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
-    expect( isTMNT( 'Nazis are the dumbest people', false, BANNED_WORDS, BANNED_PHRASES ) ).to.be.deep.equal( { result: false, reason: 'banned word' } )
-    expect( isTMNT( 'Billy is a rugby player', false, BANNED_WORDS, BANNED_PHRASES ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
-    expect( isTMNT( 'baron Mutant Ninja Turtles', false, BANNED_WORDS, BANNED_PHRASES ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
-    expect( isTMNT( 'one two three four five six seven', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
-    expect( isTMNT( 'HD is the best thing ever', false, BANNED_WORDS, BANNED_PHRASES ).result ).to.be.true
+    expect( isTMNT( 'Teenage Mutant Ninja Turtles', false, bannedWords, bannedPhrases ).result ).to.be.true
+    expect( isTMNT( '[Single Payer Health Insurance]', false, bannedWords, bannedPhrases ).result ).to.be.true
+    expect( isTMNT( 'Romeo, Romeo, wherefore art thou, Romeo?', false, bannedWords, bannedPhrases ).result ).to.be.false
+    expect( isTMNT( 'Big fire of 2014', false, bannedWords, bannedPhrases ).result ).to.be.true
+    expect( isTMNT( 'Big fire of 1923', false, bannedWords, bannedPhrases ).result ).to.be.false
+    expect( isTMNT( 'Sitting on the subway station', false, bannedWords, bannedPhrases ).result ).to.be.true
+    expect( isTMNT( 'Murder of the subway station', false, bannedWords, bannedPhrases ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
+    expect( isTMNT( 'Nazis are the dumbest people', false, bannedWords, bannedPhrases ) ).to.be.deep.equal( { result: false, reason: 'banned word' } )
+    expect( isTMNT( 'Billy is a rugby player', false, bannedWords, bannedPhrases ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
+    expect( isTMNT( 'baron Mutant Ninja Turtles', false, bannedWords, bannedPhrases ) ).to.be.deep.equal( { result: false, reason: 'banned phrase' } )
+    expect( isTMNT( 'one two three four five six seven', false, bannedWords, bannedPhrases ).result ).to.be.true
+    expect( isTMNT( 'HD is the best thing ever', false, bannedWords, bannedPhrases ).result ).to.be.true
   } )
 } )
 

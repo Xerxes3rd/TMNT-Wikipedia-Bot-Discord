@@ -1,5 +1,5 @@
 const { default: wiki } = require( 'wikijs' )
-const { BANNED_WORDS, BANNED_PHRASES } = require( './bannedItems.js' )
+const { bannedWords, bannedPhrases } = require( './bannedItems.js' )
 const { isTMNT } = require( './tmntWords.js' )
 
 const MAX_PAGES_TO_CHECK = 250
@@ -21,7 +21,7 @@ async function searchForTMNT( max_pages = MAX_PAGES_TO_CHECK, doLog = false ) {
         .random( numPagesPerCheck )
       // .then(titles => titles.find(title => isTMNT(title).result))
         .then( titles => titles.find( title => {
-          const { result, reason } = isTMNT( title, false, BANNED_WORDS, BANNED_PHRASES )
+          const { result, reason } = isTMNT( title, false, bannedWords, bannedPhrases )
           if ( doLog ) {
             console.log( `${result ? 'Success' : `Fail (${reason})`}: ${title}` )
           }

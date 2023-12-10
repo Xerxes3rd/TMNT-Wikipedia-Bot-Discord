@@ -1,4 +1,4 @@
-const BANNED_WORDS = [
+const bannedWords = [
   'rape',
   'nazi',
   'victim',
@@ -6,7 +6,7 @@ const BANNED_WORDS = [
   'bombing',
 ]
 
-const BANNED_PHRASES = [
+const bannedPhrases = [
   'shooting',
   'railway station',
   'rugby union',
@@ -17,4 +17,4 @@ const BANNED_PHRASES = [
   'baron ',
 ]
 
-module.exports = { BANNED_WORDS, BANNED_PHRASES }
+module.exports = { bannedWords, bannedPhrases }

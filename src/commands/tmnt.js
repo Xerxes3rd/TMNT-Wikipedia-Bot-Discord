@@ -56,15 +56,15 @@ module.exports = [
 
       if ( result ) {
         console.log( `Title: ${pageTitle}, URL: ${url} (checked ${pagesChecked} pages)` )
-        const attachment = new AttachmentBuilder( buf, { name: 'tmnt-wiki-image.png', description: url } )
+        const attachment = new AttachmentBuilder( buf, { name: 'tmnt-wiki-image.png', description: pageTitle } )
         try {
-          await interaction.editReply( { body: url, files: [attachment] } )
+          await interaction.editReply( { content: url, files: [attachment] } )
         } catch ( ex ) {
           console.log( `Error sending TMNT wiki image: ${JSON.stringify( ex )}` )
         }
       } else {
         console.log( `Failure: checked ${pagesChecked} pages and none matched` )
-        await interaction.editReply( `Bummer, dude!  I checked ${pagesChecked} pages and none were worthy of TMNT` )
+        await interaction.editReply( `Bummer, dude!  I checked ${pagesChecked} pages and none were worthy of TMNT.` )
       }
     },
   },

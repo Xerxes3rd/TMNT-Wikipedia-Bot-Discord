@@ -176,7 +176,7 @@ async function makeTMNTLogo( str, backgroundColor = 'transparent', usePureImage 
 
   const ctx = canvas.getContext( '2d' )
 
-  if ( backgroundColor !== 'transparent' ) {
+  if ( backgroundColor && backgroundColor !== 'transparent' ) {
     ctx.fillStyle = backgroundColor
     ctx.fillRect( 0, 0, canvas.width, canvas.height )
   }

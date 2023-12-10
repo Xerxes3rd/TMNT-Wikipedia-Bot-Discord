@@ -23,7 +23,7 @@
     "node-cron": "^3.0.3",
     "number-to-words": "^1.2.4",
     "pronouncing": "github:aparrish/pronouncingjs",
-    "pureimage": "^0.3.14",
+    "pureimage": "^0.4.13",
     "wikijs": "^6.4.0"
   },
   "devDependencies": {

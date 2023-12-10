@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 const expect = require( 'chai' ).expect
 const { join } = require( 'path' )
 const { isTMNT, splitStringForTMNT } = require( '../src/tmntWords.js' )
 const { makeTMNTLogo } = require( '../src/tmntLogo.js' )
-const { findTMNTPage } = require( '../src/tmntWikiSearch.js' )
 const { bannedWords, bannedPhrases } = require( '../src/bannedItems.js' )
 const fs = require( 'fs' )
 
@@ -46,20 +44,10 @@ describe( 'Logo generation tests', async () => {
   } )
   it( 'Should generate a "this one has some (parens in it)" TMNT logo PNG', async () => {
     const buf = await makeTMNTLogo( 'this one has some (parens in it)' )
-    fs.writeFileSync( join( __dirname, 'output', 'thisone.png' ), buf )
+    fs.writeFileSync( join( __dirname, 'output', 'parens.png' ), buf )
   } )
   it( 'Should generate the TMNT logo PNG using PureImage', async () => {
-    const buf = await makeTMNTLogo( 'Teenage Mutant Ninja Turtles', undefined, true )
+    const buf = await makeTMNTLogo( 'Teenage Mutant Ninja Turtles', 'transparent', true )
     fs.writeFileSync( join( __dirname, 'output', 'tmnt-pi.png' ), buf )
   } )
 } )
-
-// async function test_makeLogoSearch() {
-//   const { pageTitle, url } = await findTMNTPage()
-//   console.log( `Title: ${pageTitle}, URL: ${url}` )
-//   const buf = await makeTMNTLogo( pageTitle )
-//   // const buf = await makeTMNTLogo('Teenage Mutant Ninja Turtles')
-//   // const buf = await makeTMNTLogo('Single Payer Health Insurance', 'white' )
-//   fs.writeFileSync( 'out.png', buf )
-//   console.log( 'done' )
-// }

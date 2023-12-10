@@ -1,25 +1,31 @@
 const { AttachmentBuilder } = require( 'discord.js' )
+const AsyncLock = require( 'async-lock' )
 const { getTMNTWikiLogo } = require( './tmntWikiLogo.js' )
 
 const dailyKeyName = 'daily'
+const lock = new AsyncLock( { timeout: 5000 } )
 
 async function setScheduledPost( keyv, guildId, channelId ) {
   if ( keyv && guildId ) {
-    let daily = await keyv.get( dailyKeyName )
-    if ( !daily ) {
-      daily = {}
-    }
-    if ( channelId ) {
-      daily[guildId] = { channelId }
-    } else {
-      delete daily[guildId]
-    }
-    await keyv.set( dailyKeyName, daily )
-    const v = await keyv.get( guildId )
-    if ( v ) {
-      console.log( v )
-    }
-    return
+    lock.acquire( dailyKeyName, async function( done ) {
+      console.log( 'Updating schedule' )
+      let daily = await keyv.get( dailyKeyName )
+      if ( !daily ) {
+        daily = {}
+      }
+      if ( channelId ) {
+        daily[guildId] = { channelId }
+      } else {
+        delete daily[guildId]
+      }
+      await keyv.set( dailyKeyName, daily )
+      console.log( `There are ${Object.keys( daily ).length} guild(s) scheduled for TMNT images` )
+      done( )
+    }, function( err, ret ) {
+      if ( err ) {
+        console.log( `Lock error: ${err} (${ret})` )
+      }
+    } )
   }
 }
 

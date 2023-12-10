@@ -7,29 +7,30 @@ const { doDailyPost } = require( './keyvHelper.js' )
 
 function loadCommands( client, keyv ) {
   client.commands = new Collection()
-  const allCommands = []
+  const pgmCommands = []
   const publicCommands = []
   for ( const command of tmntCommands ) {
     client.commands.set( command.data.name, command )
     command.keyv = keyv
-    allCommands.push( command.data.toJSON() )
-    if ( !command.pgmOnly ) {
+    if ( command.pgmOnly ) {
+      pgmCommands.push( command.data.toJSON() )
+    } else {
       publicCommands.push( command.data.toJSON() )
     }
   }
 
-  return { allCommands, publicCommands }
+  return { pgmCommands, publicCommands }
 }
 
-async function refreshSlashCommands( allCommands, publicCommands ) {
+async function refreshSlashCommands( pgmCommands, publicCommands ) {
   const rest = new REST().setToken( token )
   try {
-    console.log( `Started refreshing ${allCommands.length} guild-specific (/) commands.` )
+    console.log( `Started refreshing ${pgmCommands.length} guild-specific (/) commands.` )
 
     // The put method is used to fully refresh all commands in the guild with the current set
     const data = await rest.put(
       Routes.applicationGuildCommands( clientId, guildId ),
-      { body: allCommands },
+      { body: pgmCommands },
     )
 
     console.log( `Successfully reloaded ${data.length} guild-specific (/) commands.` )
@@ -56,14 +57,14 @@ async function refreshSlashCommands( allCommands, publicCommands ) {
 async function start( keyv, client, doRefreshSlashCommands = true ) {
   keyv.on( 'error', err => console.error( 'Keyv connection error:', err ) )
 
-  const { allCommands, publicCommands } = loadCommands( client, keyv )
+  const { pgmCommands, publicCommands } = loadCommands( client, keyv )
 
   // When the client is ready, run this code (only once).
   // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
   // It makes some properties non-nullable.
   client.once( Events.ClientReady, readyClient => {
     if ( doRefreshSlashCommands ) {
-      refreshSlashCommands( allCommands, publicCommands )
+      refreshSlashCommands( pgmCommands, publicCommands )
     }
     // doDailyPost( keyv, client ) // for testing
     dailyJob.start()

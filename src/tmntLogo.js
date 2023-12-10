@@ -35,7 +35,7 @@ function getLetterHeight( textMetrics ) {
 
 function drawAngledBox( ctx, startX, startY, width, height, borderWidth, color ) {
   // red box(es)
-  const boxAngle = 50
+  const boxAngle = 45
   const boxX = startX - borderWidth
   const boxY = startY - height - borderWidth
   const boxWidth = width + borderWidth * 2
@@ -43,12 +43,12 @@ function drawAngledBox( ctx, startX, startY, width, height, borderWidth, color )
 
   for ( let i = 0; i <= 1; i++ ) {
     const angle = i > 0 ? -boxAngle : boxAngle
+    const extra = i > 0 ? borderWidth : -borderWidth
+    const anglePct = angle / 90
     ctx.save()
     ctx.fillStyle = color
-    ctx.translate( boxX + boxWidth, boxY + boxHeight )
-    ctx.rotate( deg2rad( 180 ) )
-    ctx.transform( 1, 0, angle / 100, 1, 0, 0 )
-    ctx.fillRect( 0, 0, boxWidth, boxHeight )
+    ctx.transform( 1, 0, anglePct, 1, 0, 0 )
+    ctx.fillRect( boxX - angle + ( boxHeight * anglePct ) + extra, boxY, boxWidth, boxHeight )
     ctx.restore()
   }
 }
@@ -64,8 +64,8 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
   const letterDescent = getLetterDescent( textMetrics )
   const startX = canvasWidth / 2 - textMetrics.width / 2
   const startY = canvasHeight / 2.5
-  const startAngle = 45
-  const endAngle = -45
+  const startAngle = 40
+  const endAngle = -40
 
   // red box(es)
   const borderWidth = fontSize * 0.2
@@ -95,7 +95,7 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
     ctx.save()
 
     ctx.translate( x, y )
-    ctx.transform( 1, 0, angle / 100, 1, 0, 0 )
+    ctx.transform( 1, 0, angle / 90, 1, 0, 0 )
     ctx.fillStyle = 'white'
     ctx.fillText( letters[i], 0, 0 )
 

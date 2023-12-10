@@ -1,9 +1,9 @@
 const { phonesForWord, stresses } = require( 'pronouncing' )
 const { toWords, toWordsOrdinal } = require( 'number-to-words' )
 
-const TMNT_STRESSES = new RegExp( '1[02]1[02]1[02]1[02]' )
-const PRONUNCIATION_OVERRIDES = [['HD', '10'], ['U.S.', '10'], ['Laos', '1'], ['vs.', '10']]
-const STRESS_FAIL = '9999999999' // Hacky way of discarding candidate title
+const TMNTStressesRegExp = new RegExp( '1[02]1[02]1[02]1[02]' )
+const pronunciationOverrides = [['HD', '10'], ['U.S.', '10'], ['Laos', '1'], ['vs.', '10'], ['dr.', '10'], ['bot', '1']]
+const stressFail = '9999999999' // Hacky way of discarding candidate title
 
 function toWordsYear( num_str ) {
   const num = parseInt( num_str )
@@ -34,7 +34,7 @@ function numbersToWords( word ) {
         return toWordsYear( word )
       }
       catch {
-        return STRESS_FAIL
+        return stressFail
       }
     }
     else if ( word.length >= 3 &&
@@ -44,7 +44,7 @@ function numbersToWords( word ) {
         return toWordsOrdinal( word.substring( 0, word.length - 2 ) )
       }
       catch {
-        return STRESS_FAIL
+        return stressFail
       }
     }
   }
@@ -59,7 +59,7 @@ function getWordStresses( word ) {
   converted_word.split( ' ' ).forEach( split_word => {
 
     let found_override = false
-    PRONUNCIATION_OVERRIDES.every( override => {
+    pronunciationOverrides.every( override => {
       if ( split_word === override[0].toLowerCase() ) {
         word_stresses += override[1]
         found_override = true
@@ -71,7 +71,7 @@ function getWordStresses( word ) {
     if ( !found_override ) {
       const phones = phonesForWord( split_word )
       if ( !phones || phones.length === 0 ) {
-        word_stresses += STRESS_FAIL
+        word_stresses += stressFail
       }
 
       word_stresses += stresses( phones.length > 0 ? phones[0] : '' )
@@ -140,7 +140,7 @@ function isTMNT( title, exactTMNTStresses = false, bannedWords = [], bannedPhras
     return { result: false, reason: `wrong stresses: ${title_stresses}` }
   }
 
-  if ( exactTMNTStresses && !title_stresses.match( TMNT_STRESSES ) ) {
+  if ( exactTMNTStresses && !title_stresses.match( TMNTStressesRegExp ) ) {
     return { result: false, reason: `not TMNT stresses: ${title_stresses}` }
   }
 
@@ -148,8 +148,8 @@ function isTMNT( title, exactTMNTStresses = false, bannedWords = [], bannedPhras
 }
 
 module.exports = {
-  TMNT_STRESSES,
-  PRONUNCIATION_OVERRIDES,
+  TMNT_STRESSES: TMNTStressesRegExp,
+  PRONUNCIATION_OVERRIDES: pronunciationOverrides,
   toWordsYear,
   numbersToWords,
   getWordStresses,

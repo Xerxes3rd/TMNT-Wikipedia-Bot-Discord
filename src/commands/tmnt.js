@@ -4,7 +4,24 @@ const { getTMNTWikiLogo } = require( '../tmntWikiLogo.js' )
 const { logInteraction } = require( './commandsUtils.js' )
 const { addScheduledPost, removeScheduledPost } = require( '../keyvHelper.js' )
 
+BigInt.prototype.toJSON = function() { return this.toString() }
+
 module.exports = [
+  {
+    data: new SlashCommandBuilder()
+      .setName( 'tmnt-ping' )
+      .setDescription( 'Replies with Pong!' ),
+    async execute( interaction ) {
+      logInteraction( 'ping', interaction )
+      console.log( JSON.stringify( interaction ) )
+      try {
+        await interaction.reply( 'Pong!' )
+      } catch ( ex ) {
+        console.log( `Error sending reply: ${JSON.stringify( ex )}` )
+      }
+    },
+    pgmOnly: true,
+  },
   {
     data: new SlashCommandBuilder()
       .setName( 'tmnt-ize' )
@@ -67,6 +84,7 @@ module.exports = [
         await interaction.editReply( `Bummer, dude!  I checked ${pagesChecked} pages and none were worthy of TMNT.` )
       }
     },
+    pgmOnly: true,
   },
   {
     data: new SlashCommandBuilder()

@@ -2,35 +2,51 @@ const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require(
 const Keyv = require( 'keyv' )
 const cron = require( 'node-cron' )
 const { token, clientId, guildId } = require( './config.json' )
-const utilityCommands = require( './commands/utility.js' )
 const tmntCommands = require( './commands/tmnt.js' )
 const { doDailyPost } = require( './keyvHelper.js' )
 
-async function loadCommands( client, keyv ) {
+function loadCommands( client, keyv ) {
   client.commands = new Collection()
-  for ( const command of utilityCommands ) {
-    client.commands.set( command.data.name, command )
-    command.keyv = keyv
-  }
+  const allCommands = []
+  const publicCommands = []
   for ( const command of tmntCommands ) {
     client.commands.set( command.data.name, command )
     command.keyv = keyv
+    allCommands.push( command.data.toJSON() )
+    if ( !command.pgmOnly ) {
+      publicCommands.push( command.data.toJSON() )
+    }
   }
+
+  return { allCommands, publicCommands }
 }
 
-async function refreshSlashCommands( client ) {
-  const commands = client.commands.map( command => command.data.toJSON() )
+async function refreshSlashCommands( allCommands, publicCommands ) {
   const rest = new REST().setToken( token )
   try {
-    console.log( `Started refreshing ${commands.length} application (/) commands.` )
+    console.log( `Started refreshing ${allCommands.length} guild-specific (/) commands.` )
 
     // The put method is used to fully refresh all commands in the guild with the current set
     const data = await rest.put(
       Routes.applicationGuildCommands( clientId, guildId ),
-      { body: commands },
+      { body: allCommands },
     )
 
-    console.log( `Successfully reloaded ${data.length} application (/) commands.` )
+    console.log( `Successfully reloaded ${data.length} guild-specific (/) commands.` )
+  } catch ( error ) {
+    // And of course, make sure you catch and log any errors!
+    console.error( error )
+  }
+  try {
+    console.log( `Started refreshing ${publicCommands.length} public (/) commands.` )
+
+    // The put method is used to fully refresh all commands in the guild with the current set
+    const data = await rest.put(
+      Routes.applicationCommands( clientId, guildId ),
+      { body: publicCommands },
+    )
+
+    console.log( `Successfully reloaded ${data.length} public (/) commands.` )
   } catch ( error ) {
     // And of course, make sure you catch and log any errors!
     console.error( error )
@@ -40,14 +56,14 @@ async function refreshSlashCommands( client ) {
 async function start( keyv, client, doRefreshSlashCommands = true ) {
   keyv.on( 'error', err => console.error( 'Keyv connection error:', err ) )
 
-  loadCommands( client, keyv )
+  const { allCommands, publicCommands } = loadCommands( client, keyv )
 
   // When the client is ready, run this code (only once).
   // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
   // It makes some properties non-nullable.
   client.once( Events.ClientReady, readyClient => {
     if ( doRefreshSlashCommands ) {
-      refreshSlashCommands( client )
+      refreshSlashCommands( allCommands, publicCommands )
     }
     // doDailyPost( keyv, client ) // for testing
     dailyJob.start()

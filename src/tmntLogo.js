@@ -93,12 +93,10 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
     }
 
     ctx.save()
-
+    ctx.fillStyle = 'white'
     ctx.translate( x, y )
     ctx.transform( 1, 0, angle / 90, 1, 0, 0 )
-    ctx.fillStyle = 'white'
     ctx.fillText( letters[i], 0, 0 )
-
     ctx.restore()
 
     currentX += letterWidth + kearning

@@ -1,8 +1,10 @@
 const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require( 'discord.js' )
 const Keyv = require( 'keyv' )
+const { CronJob } = require( 'cron' )
 const { token, clientId, guildId } = require( './config.json' )
 const utilityCommands = require( './commands/utility.js' )
 const tmntCommands = require( './commands/tmnt.js' )
+const { doDailyPost } = require( './keyvHelper.js' )
 
 async function loadCommands( client, keyv ) {
   client.commands = new Collection()
@@ -50,6 +52,8 @@ async function main() {
   // It makes some properties non-nullable.
   client.once( Events.ClientReady, readyClient => {
     updateSlashCommands( client )
+    // doDailyPost( keyv, client ) // for testing
+    dailyJob.start()
     console.log( `Ready! Logged in as ${readyClient.user.tag}` )
   } )
 
@@ -77,6 +81,16 @@ async function main() {
 
   // Log in to Discord with your client's token
   client.login( token )
+
+  const dailyJob = new CronJob(
+    '0 0 8 * * *', // 8 AM
+    async function() { doDailyPost( keyv, client ) }, // onTick
+    null, // onComplete
+    false, // start
+    'America/Los_Angeles', // timeZone
+    undefined,
+    false,
+  )
 }
 
 main()

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, AttachmentBuilder, ChannelType, PermissionFlagsBits
 const { makeTMNTLogo } = require( '../tmntLogo.js' )
 const { getTMNTWikiLogo } = require( '../tmntWikiLogo.js' )
 const { logInteraction } = require( './commandsUtils.js' )
+const { addScheduledPost, removeScheduledPost } = require( '../keyvHelper.js' )
 
 module.exports = [
   {
@@ -90,6 +91,8 @@ module.exports = [
       const channelName = channel.name
       logInteraction( `set daily channel to ${channelName} (${guildId}:${channelId})`, interaction )
 
+      await addScheduledPost( this.keyv, guildId, channelId )
+
       try {
         await interaction.editReply( `Set daily TMNT posting channel to ${channel}` )
       } catch ( ex ) {
@@ -113,6 +116,8 @@ module.exports = [
       const guildId = guild?.id
       const guildName = guild?.name
       logInteraction( `disabling daily channel for guild ${guildName} (ID: ${guildId})`, interaction )
+
+      await removeScheduledPost( this.keyv, guildId )
 
       try {
         await interaction.editReply( 'Disabled daily TMNT posting' )

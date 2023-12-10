@@ -15,7 +15,7 @@
   "dependencies": {
     "@keyv/sqlite": "^3.6.6",
     "@napi-rs/canvas": "^0.1.44",
-    "canvas": "^2.11.2",
+    "cron": "^3.1.6",
     "discord.js": "^14.7.1",
     "keyv": "^4.5.4",
     "memorystream": "^0.3.1",

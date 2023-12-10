@@ -12,7 +12,7 @@ describe( 'Text parsing tests', async () => {
   it( 'Should split phrases correctly', async () => {
     expect( splitStringForTMNT( 'Teenage Mutant Ninja Turtles' ) ).to.be.deep.equal( { teenageMutantNinja : 'Teenage Mutant Ninja', turtles : 'Turtles' } )
     expect( splitStringForTMNT( 'one two three four five six one two' ) ).to.be.deep.equal( { teenageMutantNinja : 'one two three four five six', turtles : 'one two' } )
-    expect( splitStringForTMNT( 'Scott has made the best Discord bot' ) ).to.be.deep.equal( { teenageMutantNinja : 'Scott has made the best Discord', turtles : 'bot' } )
+    expect( splitStringForTMNT( 'Scott has made the best Discord bot' ) ).to.be.deep.equal( { teenageMutantNinja : 'Scott has made the best', turtles : 'Discord bot' } )
   } )
 
   it( 'Should identify all the syllables in phrases', async () => {

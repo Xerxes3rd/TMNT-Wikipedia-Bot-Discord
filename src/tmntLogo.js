@@ -150,9 +150,8 @@ function drawTurtles( ctx, canvasWidth, canvasHeight, turtles, turtlesFontName )
   }
 }
 
-async function makeTMNTLogo( str, backgroundColor = 'transparent' ) {
-  // note: PureImage has some rending issues, so use Canvas for now
-  const usePureImage = false
+async function makeTMNTLogo( str, backgroundColor = 'transparent', usePureImage = false ) {
+  // note: PureImage has some rending issues, so it's best to use Canvas for now
   const teenageMutantNinjaFontName = 'TeenageMutantNinja'
   const turtlesFontName = 'Turtles'
 

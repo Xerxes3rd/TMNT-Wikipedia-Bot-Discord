@@ -48,6 +48,10 @@ describe( 'Logo generation tests', async () => {
     const buf = await makeTMNTLogo( 'this one has some (parens in it)' )
     fs.writeFileSync( join( __dirname, 'output', 'thisone.png' ), buf )
   } )
+  it( 'Should generate the TMNT logo PNG using PureImage', async () => {
+    const buf = await makeTMNTLogo( 'Teenage Mutant Ninja Turtles', undefined, true )
+    fs.writeFileSync( join( __dirname, 'output', 'tmnt-pi.png' ), buf )
+  } )
 } )
 
 // async function test_makeLogoSearch() {

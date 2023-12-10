@@ -1,0 +1,27 @@
+{
+  "name": "wikipedia-tmnt-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.44",
+    "canvas": "^2.11.2",
+    "discord.js": "^14.7.1",
+    "memorystream": "^0.3.1",
+    "nan": "^2.17.0",
+    "number-to-words": "^1.2.4",
+    "pronouncing": "github:aparrish/pronouncingjs",
+    "pureimage": "^0.3.14",
+    "wikijs": "^6.4.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "eslint": "^8.55.0",
+    "mocha": "^10.2.0"
+  }
+}

@@ -9,14 +9,28 @@ function deg2rad( degrees ) {
   return degrees * ( pi / 180 )
 }
 
-function getLetterHeight( textMetrics ) {
-  if ( textMetrics.actualBoundingBoxAscent !== undefined && textMetrics.actualBoundingBoxDescent !== undefined ) {
-    return textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent
-  } else if ( textMetrics.emHeightAscent !== undefined && textMetrics.emHeightDescent !== undefined ) {
-    return textMetrics.emHeightAscent - textMetrics.emHeightDescent
+function getLetterAscent( textMetrics ) {
+  if ( textMetrics.actualBoundingBoxAscent !== undefined ) {
+    return textMetrics.actualBoundingBoxAscent
+  } else if ( textMetrics.emHeightAscent !== undefined ) {
+    return textMetrics.emHeightAscent
   } else {
     return 0
   }
+}
+
+function getLetterDescent( textMetrics ) {
+  if ( textMetrics.actualBoundingBoxDescent !== undefined ) {
+    return textMetrics.actualBoundingBoxDescent
+  } else if ( textMetrics.emHeightDescent !== undefined ) {
+    return -textMetrics.emHeightDescent
+  } else {
+    return 0
+  }
+}
+
+function getLetterHeight( textMetrics ) {
+  return getLetterAscent( textMetrics ) + getLetterDescent( textMetrics )
 }
 
 function drawAngledBox( ctx, startX, startY, width, height, borderWidth, color ) {
@@ -47,6 +61,7 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
 
   const kearning = 0
   const letterHeight = getLetterHeight( textMetrics )
+  const letterDescent = getLetterDescent( textMetrics )
   const startX = canvasWidth / 2 - textMetrics.width / 2
   const startY = canvasHeight / 2.5
   const startAngle = 45
@@ -61,7 +76,7 @@ function drawTeenageMutantNinja( ctx, canvasWidth, canvasHeight, teenageMutantNi
   let currentX = startX
   for ( let i = 0; i < letters.length; i++ ) {
     const x = currentX
-    const y = startY
+    const y = startY - letterDescent
 
     const letterMetrics = ctx.measureText( letters[i] )
     const letterWidth = letterMetrics.width

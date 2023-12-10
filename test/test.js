@@ -44,6 +44,10 @@ describe( 'Logo generation tests', async () => {
     const buf = await makeTMNTLogo( 'one two three four five six one two', 'black' )
     fs.writeFileSync( join( __dirname, 'output', '12345612.png' ), buf )
   } )
+  it( 'Should generate a "this one has some (parens in it)" TMNT logo PNG', async () => {
+    const buf = await makeTMNTLogo( 'this one has some (parens in it)' )
+    fs.writeFileSync( join( __dirname, 'output', 'thisone.png' ), buf )
+  } )
 } )
 
 // async function test_makeLogoSearch() {

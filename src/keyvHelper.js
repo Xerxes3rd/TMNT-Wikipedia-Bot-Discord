@@ -58,7 +58,7 @@ async function doDailyPost( keyv, client ) {
   if ( result ) {
     console.log( `Daily post: searched ${pagesChecked} pages and found "${pageTitle} at ${url}"` )
     const attachment = new AttachmentBuilder( buf, { name: 'tmnt-wiki-image.png', description: url } )
-    msg = { body: url, files: [attachment] }
+    msg = { content: url, files: [attachment] }
   } else {
     console.log( `Daily post: searched ${pagesChecked} pages and could not find any TMNT-worthy pages` )
     msg = `Bummer dude, I searched through ${pagesChecked} Wiki pages and couldn't find any that were TMNT-worthy`

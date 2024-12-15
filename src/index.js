@@ -93,6 +93,14 @@ async function start( keyv, client, doRefreshSlashCommands = true ) {
     }
   } )
 
+  client.on( Events.Error, async error => {
+    console.error( 'General event error:', error )
+  } )
+
+  client.on( Events.ShardError, async error => {
+    console.error( 'A websocket connection encountered an error:', error )
+  } )
+
   const dailyJob = cron.schedule(
     '0 8 * * *', // 8 AM
     async () => { await doDailyPost( keyv, client ) }, // onTick
@@ -107,6 +115,7 @@ async function start( keyv, client, doRefreshSlashCommands = true ) {
 
 async function main() {
 
+  console.log( 'Starting TMNT Wikipedia bot' )
   const keyv = new Keyv( 'sqlite://./tmnt-wikipedia-bot-db.sqlite' )
   // Create a new client instance
   const client = new Client( { intents: [GatewayIntentBits.Guilds] } )

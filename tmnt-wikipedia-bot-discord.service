@@ -1,0 +1,16 @@
+[Unit]
+Description=TMNT Wikipedia Discord Bot
+DefaultDependencies=no
+After=network-online.target
+
+[Service]
+Type=simple
+User=myusername
+Group=myusername
+ExecStart=/home/myusername/TMNT-Wikipedia-Bot-Discord/start.sh myusername
+WorkingDirectory=/home/myusername/TMNT-Wikipedia-Bot-Discord
+TimeoutStartSec=2
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

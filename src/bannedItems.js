@@ -4,6 +4,7 @@ const bannedWords = [
   'victim',
   'shootings',
   'bombing',
+  'holocaust',
 ]
 
 const bannedPhrases = [
